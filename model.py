@@ -1,8 +1,11 @@
 # coding: utf-8
+import json
 from sqlalchemy import *
 from sqlalchemy.dialects.mysql import BIGINT, INTEGER, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import create_session
+
+from utils import DecimalEncoder
 
 # 数据库连接配置
 from configs import DB_URI
@@ -14,6 +17,10 @@ engine = create_engine(DB_URI)
 metadata = Base.metadata
 
 
+
+
+# 创建事务
+session = create_session(bind=engine)
 
 # 部门表
 class Department(Base):
@@ -61,6 +68,35 @@ class Rose(Base):
     weight = Column(Float(asdecimal=True))
 
 
+    def to_json(self):
+        json_data = {
+            'id': self.id,
+            'bottom_max': self.bottom_max,
+            'bottom_mean': self.bottom_mean,
+            'bottom_median': self.bottom_median,
+            'bottom_std': self.bottom_std,
+            'create_time': self.create_time,
+            'height_max': self.height_max,
+            'height_mean': self.height_mean,
+            'height_std': self.height_std,
+            'total_max': self.total_max,
+            'total_mean': self.total_mean,
+            'total_median': self.total_median,
+            'total_std': self.total_std,
+            'up_max': self.up_max,
+            'up_mean': self.up_mean,
+            'up_median': self.up_median,
+            'up_std': self.up_std,
+            'grade': self.grade,
+            'weight': self.weight
+        }
+        return json.dumps(json_data,cls= DecimalEncoder)
+
+
+    # 返回全部数据
+    def queryRoseData(self):
+        rose = session.query(Rose).all();
+        return rose
 
 
 
@@ -72,25 +108,10 @@ class User(Base):
     user_password = Column(String(20))
     user_name = Column(String(50))
 
-    # 查询单个对象
+    # 根据用户名和密码 查询单个对象
     def queryObject(self,userName,userPassword):
         user = session.query(User).filter(User.user_name == userName,User.user_password == userPassword).first()
         return user
 
 
 
-
-# 创建事务
-session = create_session(bind=engine)
-
-# 测试数据库查询功能
-rose = session.query(Rose).all()
-
-
-
-#
-# def show_query_result(rest):
-#     for rose in rest:
-#         print(rose.bottom_max)
-#
-# show_query_result(rest)
