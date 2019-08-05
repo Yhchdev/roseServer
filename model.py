@@ -42,31 +42,34 @@ class Employee(Base):
     last_name = Column(VARCHAR(255))
 
 
+
+
+
 # 玫瑰花属性数据
 class Rose(Base):
     __tablename__ = 'rose'
 
-    id = Column(INTEGER(11), primary_key=True)
-    bottom_max = Column(Float(asdecimal=True))
-    bottom_mean = Column(Float(asdecimal=True))
-    bottom_median = Column(Float(asdecimal=True))
-    bottom_std = Column(Float(asdecimal=True))
-    create_time = Column(BIGINT(20))
-    height_max = Column(Float(asdecimal=True))
-    height_mean = Column(Float(asdecimal=True))
-    height_median = Column(Float(asdecimal=True))
-    height_std = Column(Float(asdecimal=True))
-    total_max = Column(Float(asdecimal=True))
-    total_mean = Column(Float(asdecimal=True))
-    total_median = Column(Float(asdecimal=True))
-    total_std = Column(Float(asdecimal=True))
-    up_max = Column(Float(asdecimal=True))
-    up_mean = Column(Float(asdecimal=True))
-    up_median = Column(Float(asdecimal=True))
-    up_std = Column(Float(asdecimal=True))
-    grade = Column(CHAR(10))
-    weight = Column(Float(asdecimal=True))
-
+    id = Column(INTEGER(255), primary_key=True)
+    up_max = Column(Float(255, True))
+    up_mean = Column(Float(255, True))
+    up_median = Column(Float(255, True))
+    up_std = Column(Float(255, True))
+    bottom_max = Column(Float(255, True))
+    bottom_mean = Column(Float(255, True))
+    bottom_median = Column(Float(255, True))
+    bottom_std = Column(Float(255, True))
+    total_max = Column(Float(255, True))
+    total_mean = Column(Float(255, True))
+    total_median = Column(Float(255, True))
+    total_std = Column(Float(255, True))
+    height_max = Column(Float(255, True))
+    height_mean = Column(Float(255, True))
+    height_median = Column(Float(255, True))
+    height_std = Column(Float(255, True))
+    stem_len = Column(Float(255, True))
+    weight = Column(Float(255, True))
+    grade = Column(CHAR(255, 'utf8_bin'))
+    create_time = Column(DateTime)
 
     def to_json(self):
         json_data = {
@@ -88,7 +91,8 @@ class Rose(Base):
             'up_median': self.up_median,
             'up_std': self.up_std,
             'grade': self.grade,
-            'weight': self.weight
+            'weight': self.weight,
+            'stem_len':self.stem_len
         }
         return json.dumps(json_data,cls= DecimalEncoder)
 
@@ -105,8 +109,10 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(INTEGER(11), primary_key=True)
-    user_password = Column(String(20))
-    user_name = Column(String(50))
+    user_password = Column(String(255, 'utf8_bin'))
+    user_name = Column(String(255, 'utf8_bin'))
+
+
 
     # 根据用户名和密码 查询单个对象
     def queryObject(self,userName,userPassword):
