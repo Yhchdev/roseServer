@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
 
-import json
+from app.service.processMeg import parsing_message
 
 from app.user import user
 from app.rose import rose
@@ -12,9 +12,10 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # 允许所有域名跨域
 CORS(app, supports_credentials=True)
 
-app.config['SECRET'] = 'yhchdev'
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['MQTT_BROKER_URL'] = '193.112.77.165'
+#app.config['SECRET'] = 'yhchdev'
+
+
+app.config['MQTT_BROKER_URL'] = '39.129.9.137'
 app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_USERNAME'] = ''
 app.config['MQTT_PASSWORD'] = ''
@@ -31,7 +32,9 @@ app.register_blueprint(rose, url_prefix='/rose')
 # 连接后 订阅主题
 @mqtt.on_connect()
 def handle_connect(client, userdata, flags, rc):
-    mqtt.subscribe('rose/pic_base64')
+    # 1/2  用/ 会导致  收到两遍消息
+    #mqtt.subscribe('rose/pic_base64')
+    mqtt.subscribe('rose')
     print("Connected with result code " + str(rc))
 
 
@@ -52,8 +55,8 @@ def handle_connect(client, userdata, flags, rc):
 
 @mqtt.on_message()
 def handle_mqtt_message(client, userdata, message):
-    print(str(message.payload))
-
+    # 调用处理消息的函数
+    parsing_message(message)
 
 
 

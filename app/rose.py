@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask import Blueprint
 import time
-from flask_csv import send_file,send_csv
+from flask_csv import send_csv
 
 
 from model import *
