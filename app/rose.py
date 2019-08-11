@@ -48,3 +48,28 @@ def getCSV():
     timeVersion = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     csvName = 'roselist_{}.csv'.format(timeVersion)
     return send_csv(roselist,csvName, CSVHead)
+
+
+
+# 返回均值 画图
+@rose.route('/charts/mean/',methods = ['GET'])
+def apiFormean():
+    rose = Rose()
+    resultSet = rose.queryRoseData()
+    count_list = []
+    count = 0
+    total_max = 0
+    total_median = 0
+    total_mean = 0
+    height_mean = 0
+    stem_len = 0
+    weight = 0
+    for roseIndex in resultSet:
+        count +=1
+        total_max += roseIndex.total_max
+        total_median  += roseIndex.total_median
+        total_mean += roseIndex.total_mean
+        height_mean += roseIndex.height_mean
+        stem_len += roseIndex.stem_len
+        weight += roseIndex.weight
+    return [total_max/count,total_median/count,total_mean/count,height_mean/count,stem_len/count,weight/count]
