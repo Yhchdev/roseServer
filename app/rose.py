@@ -72,4 +72,6 @@ def apiFormean():
         height_mean += roseIndex.height_mean
         stem_len += roseIndex.stem_len
         weight += roseIndex.weight
-    return [total_max/count,total_median/count,total_mean/count,height_mean/count,stem_len/count,weight/count]
+    count_list =  [float(total_max/count),float(total_median/count),float(total_mean/count),float(height_mean/count),float(stem_len/count),float(weight/count)]
+
+    return jsonify(count_list)
